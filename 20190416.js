@@ -109,17 +109,17 @@ var filter_out = [
     ".."
 ];
 
-var name_1 = "SpiderMonkey legacy parser";
+var name_1 = "SpiderMonkey parser";
 function parse_1(path) {
     var start = performance.now();
-    parse(path, { module: mode == "module", rustFrontend: false });
+    parse(path, { module: mode == "module", smoosh: false });
     return performance.now() - start;
 }
 
-var name_2 = "Vision experimental parser";
+var name_2 = "SmooshMonkey parser";
 function parse_2(path) {
     var start = performance.now();
-    parse(path, { module: mode == "module", rustFrontend: true });
+    parse(path, { module: mode == "module", smoosh: true });
     return performance.now() - start;
 }
 
