@@ -124,7 +124,8 @@ function parse_2(path) {
 }
 
 var path = "", content = "";
-var t_1= 0, t_2 = 0, time_1 = 0, time_2 = 0, count = 0, count_bytes = 0;
+var t_1= 0, t_2 = 0, time_1 = 0, time_2 = 0;
+var count = 0, count_bytes = 0, skipped = 0, skipped_bytes = 0;
 var list = os.file.listDir(dir);
 var f = 0;
 for (var file of list) {
@@ -134,6 +135,7 @@ for (var file of list) {
     }
 
     path = os.path.join(dir, file);
+    content = "";
     try {
         // print(Math.round(100 * f / list.length), file);
         content = os.file.readRelativeToScript(path);
@@ -155,11 +157,13 @@ for (var file of list) {
         count_bytes += content.length;
     } catch (e) {
         // ignore all errors for now.
+        skipped++;
+        skipped_bytes += content.length;
     }
 }
 
 var total_bytes = count_bytes * runs_per_script;
 print(name_1, "\t", time_1, "ms\t", 1e6 * time_1 / total_bytes, 'ns/byte\t', total_bytes / (1e6 * time_1), 'bytes/ns\t');
 print(name_2, "\t", time_2, "ms\t", 1e6 * time_2 / total_bytes, 'ns/byte\t', total_bytes / (1e6 * time_2), 'bytes/ns\t');
-print("Total number of bytes parsed:\t", total_bytes);
-print("Total number of scripts parsed:\t", count * runs_per_script);
+print("Total parsed  (scripts:", count * runs_per_script, ", bytes:", total_bytes, ")");
+print("Total skipped (scripts:", skipped * runs_per_script, ", bytes:", skipped_bytes, ")");
